@@ -1,0 +1,42 @@
+# Configuracion central del pipeline CacaoIA
+# Editar SOLO aqui las rutas; todos los scripts leen de este archivo.
+
+proyecto:
+  raiz: "C:/Users/juanv/Desktop/PROYECTO_CACAO_IA"
+  salida: "C:/Users/juanv/Desktop/PROYECTO_CACAO_IA/07_Pipeline_CacaoIA"
+
+modelos:
+  # NOTA: yolo_best (12 clases, entrenamiento de 10 epocas) NO converge -> detecta 0.
+  # yolo_deploy apunta al modelo que SI funciona (3 clases enfermedad, mAP50 0.712).
+  yolo_best: "C:/Users/juanv/Desktop/PROYECTO_CACAO_IA/02_Motor_Entrenamiento/runs_entrenamiento/cacao_yolo26_train/weights/best.pt"
+  yolo_deploy: "C:/Users/juanv/Desktop/PROYECTO_CACAO_IA/05_Datasets_Consolidados/Dataset_3_Clases_Enfermedades/runs/detect/train_robusto/weights/best.pt"
+  yolo_conf: 0.25
+  sam: "sam_b.pt"                     # se descarga solo via ultralytics si no existe
+  dinov2: "dinov2_vits14"             # torch.hub facebookresearch/dinov2 (vits14=384-dim, ligero)
+
+dataset:
+  imagenes: "C:/Users/juanv/Desktop/PROYECTO_CACAO_IA/CacaoIAV.yolo26/train/images"
+  labels:   "C:/Users/juanv/Desktop/PROYECTO_CACAO_IA/CacaoIAV.yolo26/train/labels"
+
+# 12 clases del modelo v26 (best.pt)
+clases:
+  0: Apice_cacao
+  1: Botones_florales
+  2: Covertura_suelo
+  3: Fruto_caca_mo
+  4: Fruto_cacao_am
+  5: Nervaduras_hojas_cacao
+  6: hoja_cacao_ev
+  7: hoja_cacao_hr
+  8: hoja_cacao_hv
+  9: hoja_cacao_sr
+  10: hoja_cacao_sv
+  11: platano
+
+# Clases que son HOJAS (para logica de nervaduras y color/antocianinas)
+clases_hoja: [6, 7, 8, 9, 10]
+clase_nervadura: 5
+
+paletas:
+  min_imagenes_por_objeto: 30    # minimo exigido por objeto/clase
+  n_colores_dominantes: 6        # colores por paleta (KMeans)

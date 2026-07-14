@@ -1,0 +1,35 @@
+# Datos derivados y pesados (no subir a repos)
+_derivados/
+_handoffs/*.json
+02_color_embeddings/salidas/
+03_despliegue/modelos_movil/
+04_reportes/*.png
+04_reportes/REPORTE_*.md
+
+# Modelos y binarios
+*.pt
+*.onnx
+*.tflite
+*.pth
+*.npy
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Carpetas de salida / runtime (se regeneran)
+salidas/
+runs/
+runs_entrenamiento/
+reentrenamiento/
+03_despliegue/dataset_campo/
+03_despliegue/uploads/
+node_modules/
+*.log
+*.zip
+
+# Mantener bitacora e informes clave
+!PROGRESO.md
+!README.md

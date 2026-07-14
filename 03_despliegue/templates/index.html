@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CacaoIA — Despliegue local</title>
+<style>
+  :root { --bg:#0f1b0f; --card:#18271a; --acc:#8bc34a; --acc2:#e05a4a; --tx:#e8f5e9; }
+  * { box-sizing:border-box; }
+  body { font-family:system-ui,Segoe UI,Arial; background:var(--bg); color:var(--tx); margin:0; padding:18px; }
+  h1 { color:var(--acc); margin:0 0 4px; } .sub { color:#9ab; margin-bottom:18px; font-size:14px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:820px){ .grid { grid-template-columns:1fr; } }
+  .card { background:var(--card); border-radius:14px; padding:16px; }
+  .card h3 { margin:0 0 12px; color:var(--acc); }
+  img { max-width:100%; border-radius:10px; display:block; }
+  button { background:var(--acc); color:#08140a; border:0; padding:10px 18px; border-radius:9px; font-size:15px; font-weight:600; cursor:pointer; }
+  input[type=file]{ color:var(--tx); }
+  .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+  .chip { display:inline-block; background:#24391f; padding:5px 11px; border-radius:20px; margin:3px; font-size:13px; }
+  .chip b { color:var(--acc); }
+  .bar { height:16px; border-radius:8px; background:linear-gradient(90deg,var(--acc),var(--acc2)); }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  td,th { padding:6px 8px; border-bottom:1px solid #2a3a2a; text-align:left; }
+  .muted { color:#7d907d; font-size:12px; }
+  #imgs img { margin-bottom:10px; }
+</style>
+</head>
+<body>
+  <h1>🌱 CacaoIA — Inferencia local</h1>
+  <div class="sub">Sube una foto o usa la cámara. El modelo localiza y cuenta los objetos, y colorea la pigmentación de las hojas (verde/rojo). Cada foto se guarda para reentrenar.</div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Subir foto</h3>
+      <div class="row">
+        <input type="file" id="foto" accept="image/*">
+        <button onclick="detectar()">Detectar</button>
+        <span id="estado" class="muted"></span>
+      </div>
+      <div id="resultados"></div>
+    </div>
+
+    <div class="card">
+      <h3>Resultado visual</h3>
+      <div id="imgs"><span class="muted">Aún sin imagen…</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Cámara en vivo</h3>
+    <img src="/stream" alt="cámara">
+  </div>
+
+<script>
+async function detectar(){
+  const f = document.getElementById('foto').files[0];
+  if(!f){ alert('Elige una foto'); return; }
+  document.getElementById('estado').textContent = 'Procesando…';
+  const fd = new FormData(); fd.append('foto', f);
+  const r = await fetch('/api/detect', { method:'POST', body:fd });
+  const d = await r.json();
+  if(d.error){ document.getElementById('estado').textContent = d.error; return; }
+
+  let chips = Object.entries(d.conteo).map(([k,v]) => `<span class="chip"><b>${v}</b> ${k}</span>`).join('');
+  if(!chips) chips = '<span class="muted">Sin detecciones</span>';
+
+  let filas = d.color_hojas.map(h =>
+    `<tr><td>${h.hoja}</td><td>${h.pct_rojo}%</td><td>${h.pigmentacion}</td>
+     <td><div class="bar" style="width:${Math.min(100,h.pct_rojo)}%"></div></td></tr>`).join('');
+  let tabla = filas ? `<table><tr><th>Hoja</th><th>% rojo</th><th>Pigmentación</th><th></th></tr>${filas}</table>`
+                    : '<span class="muted">No se detectaron hojas para análisis de color.</span>';
+
+  document.getElementById('resultados').innerHTML =
+    `<p><b>${d.n_total}</b> objetos detectados:</p>${chips}
+     <h4 style="color:var(--acc2)">Pigmentación (antocianina)</h4>${tabla}
+     <p class="muted">Guardada como <b>${d.guardada_como}</b> · ${d.total_campo} fotos acumuladas para reentrenar.</p>`;
+  document.getElementById('imgs').innerHTML =
+    `<div class="muted">Detección + conteo</div><img src="${d.anotada}">
+     <div class="muted">Overlay pigmentación verde/rojo</div><img src="${d.color}">`;
+  document.getElementById('estado').textContent = 'Listo ✓';
+}
+</script>
+</body>
+</html>
