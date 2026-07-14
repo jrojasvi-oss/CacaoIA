@@ -34,7 +34,7 @@
     <div class="card">
       <h3>Subir foto</h3>
       <div class="row">
-        <input type="file" id="foto" accept="image/*">
+        <input type="file" id="foto" accept="image/*" capture="environment">
         <button onclick="detectar()">Detectar</button>
         <span id="estado" class="muted"></span>
       </div>
@@ -48,29 +48,25 @@
   </div>
 
   <div class="card" style="margin-top:16px">
-    <h3>Cámara en vivo</h3>
-    <img src="/stream" alt="cámara">
+    <h3>📷 Cámara del celular</h3>
+    <video id="video" autoplay playsinline muted style="max-width:100%;border-radius:10px;background:#000"></video>
+    <div class="row" style="margin-top:10px">
+      <button onclick="cambiarCamara()">🔄 Cambiar cámara (trasera/frontal)</button>
+      <button onclick="capturar()">📸 Capturar y analizar</button>
+      <span id="camEstado" class="muted"></span>
+    </div>
   </div>
 
 <script>
-async function detectar(){
-  const f = document.getElementById('foto').files[0];
-  if(!f){ alert('Elige una foto'); return; }
-  document.getElementById('estado').textContent = 'Procesando…';
-  const fd = new FormData(); fd.append('foto', f);
-  const r = await fetch('/api/detect', { method:'POST', body:fd });
-  const d = await r.json();
-  if(d.error){ document.getElementById('estado').textContent = d.error; return; }
-
+function mostrar(d, estadoId){
+  if(d.error){ document.getElementById(estadoId).textContent = d.error; return; }
   let chips = Object.entries(d.conteo).map(([k,v]) => `<span class="chip"><b>${v}</b> ${k}</span>`).join('');
   if(!chips) chips = '<span class="muted">Sin detecciones</span>';
-
   let filas = d.color_hojas.map(h =>
     `<tr><td>${h.hoja}</td><td>${h.pct_rojo}%</td><td>${h.pigmentacion}</td>
      <td><div class="bar" style="width:${Math.min(100,h.pct_rojo)}%"></div></td></tr>`).join('');
   let tabla = filas ? `<table><tr><th>Hoja</th><th>% rojo</th><th>Pigmentación</th><th></th></tr>${filas}</table>`
                     : '<span class="muted">No se detectaron hojas para análisis de color.</span>';
-
   document.getElementById('resultados').innerHTML =
     `<p><b>${d.n_total}</b> objetos detectados:</p>${chips}
      <h4 style="color:var(--acc2)">Pigmentación (antocianina)</h4>${tabla}
@@ -78,8 +74,41 @@ async function detectar(){
   document.getElementById('imgs').innerHTML =
     `<div class="muted">Detección + conteo</div><img src="${d.anotada}">
      <div class="muted">Overlay pigmentación verde/rojo</div><img src="${d.color}">`;
-  document.getElementById('estado').textContent = 'Listo ✓';
+  document.getElementById(estadoId).textContent = 'Listo ✓';
 }
+
+async function enviar(blob, estadoId){
+  document.getElementById(estadoId).textContent = 'Procesando…';
+  const fd = new FormData(); fd.append('foto', blob, 'foto.jpg');
+  try{ const r = await fetch('/api/detect', { method:'POST', body:fd }); mostrar(await r.json(), estadoId); }
+  catch(e){ document.getElementById(estadoId).textContent = 'Error: '+e.message; }
+}
+
+function detectar(){
+  const f = document.getElementById('foto').files[0];
+  if(!f){ alert('Elige una foto'); return; }
+  enviar(f, 'estado');
+}
+
+// ----- Cámara del propio celular (trasera/frontal) -----
+let facing = "environment", stream = null;
+async function iniciarCamara(){
+  try{
+    if(stream) stream.getTracks().forEach(t=>t.stop());
+    stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode: facing }, audio:false });
+    document.getElementById('video').srcObject = stream;
+    document.getElementById('camEstado').textContent = (facing==="environment"?"Cámara trasera":"Cámara frontal")+" lista";
+  }catch(e){ document.getElementById('camEstado').textContent = "No pude abrir la cámara: "+e.message; }
+}
+function cambiarCamara(){ facing = (facing==="environment") ? "user" : "environment"; iniciarCamara(); }
+function capturar(){
+  const v = document.getElementById('video');
+  if(!v.videoWidth){ alert('La cámara aún no está lista'); return; }
+  const c = document.createElement('canvas'); c.width = v.videoWidth; c.height = v.videoHeight;
+  c.getContext('2d').drawImage(v, 0, 0);
+  c.toBlob(b => enviar(b, 'camEstado'), 'image/jpeg', 0.9);
+}
+iniciarCamara();
 </script>
 </body>
 </html>
