@@ -24,8 +24,8 @@ from ultralytics import YOLO
 # ---------------- configuracion ----------------
 # Usa el modelo de despliegue que SI detecta (yolo_deploy); cae a yolo_best si no.
 MODEL_PATH = CFG["modelos"].get("yolo_deploy") or CFG["modelos"]["yolo_best"]
+MODEL_HOJAS = CFG["modelos"].get("yolo_hojas")   # 2do modelo: tipos de hoja (9 clases)
 CONF = CFG["modelos"]["yolo_conf"]
-_CLASES_HOJA_12 = set(CFG.get("clases_hoja", [6, 7, 8, 9, 10]))  # solo si el modelo es el de 12 clases
 
 BASE = Path(__file__).resolve().parent
 CAMPO_IMG = BASE / "dataset_campo" / "images"
@@ -34,10 +34,16 @@ CAMPO_IMG.mkdir(parents=True, exist_ok=True)
 CAMPO_LAB.mkdir(parents=True, exist_ok=True)
 REGISTRO = BASE / "dataset_campo" / "registro.csv"
 
-_model = None
+_model = None      # modelo enfermedad
+_model2 = None     # modelo hojas (9 clases)
 _NAMES = {}
-_CLASES_COLOR = set()
+_NAMES2 = {}
 _COLORS = np.random.RandomState(42).randint(60, 255, size=(64, 3)).tolist()
+
+
+def _color_de(nombre):
+    """Color estable por nombre de clase (evita choques entre los 2 modelos)."""
+    return _COLORS[hash(nombre) % len(_COLORS)]
 
 # Corrige nombres de clase mal escritos en el modelo, para mostrarlos bien
 REMAP = {
@@ -47,28 +53,33 @@ REMAP = {
 
 
 def modelo():
-    """Carga el modelo y deriva nombres de clase y clases para overlay de color."""
-    global _model, _NAMES, _CLASES_COLOR
+    """Carga AMBOS modelos: enfermedad + hojas (9 clases)."""
+    global _model, _model2, _NAMES, _NAMES2
     if _model is None:
         _model = YOLO(MODEL_PATH)
         _NAMES = dict(_model.names)
-        # Si es el modelo de 12 clases usa clases_hoja; si no (p.ej. 3 enfermedad,
-        # todas sobre hoja) aplica color a TODAS las detecciones.
-        _CLASES_COLOR = _CLASES_HOJA_12 if len(_NAMES) >= 12 else set(_NAMES.keys())
+    if _model2 is None and MODEL_HOJAS and Path(MODEL_HOJAS).exists():
+        _model2 = YOLO(MODEL_HOJAS)
+        _NAMES2 = dict(_model2.names)
     return _model
 
 
 # ---------------- funciones puras ----------------
 def detectar(img_bgr, conf=CONF):
-    """Devuelve lista de detecciones [{cls,nombre,conf,bbox}]."""
-    res = modelo().predict(img_bgr, conf=conf, verbose=False)[0]
+    """Corre los DOS modelos (enfermedad + hojas) y une las detecciones."""
+    modelo()  # asegura ambos cargados
     dets = []
-    if res.boxes is not None:
+    for mdl, names in [(_model, _NAMES), (_model2, _NAMES2)]:
+        if mdl is None:
+            continue
+        res = mdl.predict(img_bgr, conf=conf, verbose=False)[0]
+        if res.boxes is None:
+            continue
         for box, cls, cf in zip(res.boxes.xyxy.cpu().numpy(),
                                 res.boxes.cls.cpu().numpy().astype(int),
                                 res.boxes.conf.cpu().numpy()):
             x1, y1, x2, y2 = map(int, box)
-            raw = _NAMES.get(int(cls), str(int(cls)))
+            raw = names.get(int(cls), str(int(cls)))
             dets.append({"cls": int(cls), "nombre": REMAP.get(raw, raw),
                          "conf": float(cf), "bbox": [x1, y1, x2, y2]})
     return dets
@@ -80,7 +91,7 @@ def anotar(img_bgr, dets):
     conteo = {}
     for d in dets:
         x1, y1, x2, y2 = d["bbox"]
-        color = _COLORS[d["cls"] % len(_COLORS)]
+        color = _color_de(d["nombre"])
         cv2.rectangle(vis, (x1, y1), (x2, y2), color, 2)
         etq = f'{d["nombre"]} {d["conf"]:.0%}'
         (tw, th), _ = cv2.getTextSize(etq, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)
@@ -96,8 +107,6 @@ def overlay_color_hojas(img_bgr, dets, umbral_rojo=0.52):
     over = img_bgr.copy()
     stats = []
     for d in dets:
-        if d["cls"] not in _CLASES_COLOR:
-            continue
         x1, y1, x2, y2 = d["bbox"]
         roi = img_bgr[y1:y2, x1:x2].astype(np.float32)
         if roi.size == 0:

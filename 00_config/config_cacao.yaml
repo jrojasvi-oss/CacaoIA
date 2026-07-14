@@ -10,6 +10,8 @@ modelos:
   # yolo_deploy apunta al modelo que SI funciona (3 clases enfermedad, mAP50 0.712).
   yolo_best: "C:/Users/juanv/Desktop/PROYECTO_CACAO_IA/02_Motor_Entrenamiento/runs_entrenamiento/cacao_yolo26_train/weights/best.pt"
   yolo_deploy: "C:/Users/juanv/Desktop/PROYECTO_CACAO_IA/05_Datasets_Consolidados/Dataset_3_Clases_Enfermedades/runs/detect/train_robusto/weights/best.pt"
+  # Modelo de HOJAS (9 clases) que se suma al de enfermedad en la app local.
+  yolo_hojas: "C:/Users/juanv/Desktop/PROYECTO_CACAO_IA/02_Motor_Entrenamiento/runs_entrenamiento/cacao_9clases_v1/weights/best.pt"
   yolo_conf: 0.25
   sam: "sam_b.pt"                     # se descarga solo via ultralytics si no existe
   dinov2: "dinov2_vits14"             # torch.hub facebookresearch/dinov2 (vits14=384-dim, ligero)
