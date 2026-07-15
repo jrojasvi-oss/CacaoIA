@@ -184,6 +184,18 @@ def api_detect():
     })
 
 
+@app.route("/api/detect_frame", methods=["POST"])
+def api_detect_frame():
+    """Detección LIGERA para la cámara en vivo: solo anota (sin guardar ni color)."""
+    f = request.files.get("foto")
+    if not f:
+        return jsonify({"error": "sin foto"}), 400
+    img = cv2.imdecode(np.frombuffer(f.read(), np.uint8), cv2.IMREAD_COLOR)
+    dets = detectar(img)
+    vis, conteo = anotar(img, dets)
+    return jsonify({"anotada": b64(vis), "conteo": conteo, "n_total": len(dets)})
+
+
 def gen_frames():
     cap = cv2.VideoCapture(0)
     while True:

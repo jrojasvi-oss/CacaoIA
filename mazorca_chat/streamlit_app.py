@@ -12,11 +12,18 @@ st.set_page_config(page_title="Mazorca IA", page_icon="🌰")
 # HF_TOKEN se pone en los Secretos de Streamlit Cloud (nunca en el código).
 def _token():
     try:
-        return st.secrets["HF_TOKEN"]          # si hay secrets.toml con el token
+        return st.secrets["HF_TOKEN"]          # 1) secrets.toml (Streamlit Cloud)
     except Exception:
-        return os.environ.get("HF_TOKEN")      # fallback a variable de entorno / None
+        pass
+    if os.environ.get("HF_TOKEN"):
+        return os.environ["HF_TOKEN"]          # 2) variable de entorno
+    try:
+        from huggingface_hub import get_token  # 3) token guardado por 'huggingface-cli login'
+        return get_token()
+    except Exception:
+        return None
 HF_TOKEN = _token()
-LLM_MODEL = os.environ.get("MAZORCA_LLM", "meta-llama/Llama-3.2-3B-Instruct")
+LLM_MODEL = os.environ.get("MAZORCA_LLM", "Qwen/Qwen2.5-7B-Instruct")  # libre, sin licencia gated
 SISTEMA = (
     "Eres 'Mazorca IA', un asistente experto y cercano sobre el cultivo de cacao "
     "(Theobroma cacao), especializado en el Valle del Cauca, Colombia. Ayudas a "

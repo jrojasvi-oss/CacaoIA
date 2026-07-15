@@ -43,10 +43,13 @@
     <h3>📷 Cámara del dispositivo</h3>
     <video id="video" autoplay playsinline muted></video>
     <div class="row" style="margin-top:10px">
-      <button onclick="cambiarCamara()">🔄 Voltear cámara (trasera/frontal)</button>
-      <button onclick="capturar()">📸 Capturar y analizar</button>
+      <button onclick="cambiarCamara()">🔄 Voltear cámara</button>
+      <button id="liveBtn" onclick="toggleLive()">▶ Detección en vivo</button>
+      <button onclick="capturar()">📸 Capturar (guarda)</button>
     </div>
     <div id="camEstado" class="muted"></div>
+    <div class="muted" id="liveInfo" style="margin-top:6px"></div>
+    <img id="liveResult" style="margin-top:8px; display:none">
   </div>
 
   <div class="card">
@@ -109,6 +112,36 @@ async function iniciarCamara(){
   }
 }
 function cambiarCamara(){ facing = (facing==="environment") ? "user" : "environment"; iniciarCamara(); }
+
+// ----- Detección EN VIVO en tiempo real (cajas + etiquetas) -----
+let liveOn = false;
+function toggleLive(){
+  liveOn = !liveOn;
+  document.getElementById('liveBtn').textContent = liveOn ? '⏸ Pausar en vivo' : '▶ Detección en vivo';
+  document.getElementById('liveResult').style.display = liveOn ? 'block' : 'none';
+  if(liveOn) liveLoop();
+}
+async function liveLoop(){
+  if(!liveOn) return;
+  const v = document.getElementById('video');
+  if(v && v.videoWidth){
+    const c = document.createElement('canvas'); c.width = v.videoWidth; c.height = v.videoHeight;
+    c.getContext('2d').drawImage(v, 0, 0);
+    const t0 = performance.now();
+    await new Promise(res => c.toBlob(async b => {
+      try{
+        const fd = new FormData(); fd.append('foto', b, 'f.jpg');
+        const r = await fetch('/api/detect_frame', { method:'POST', body:fd });
+        const d = await r.json();
+        if(d.anotada) document.getElementById('liveResult').src = d.anotada;
+        const fps = (1000/(performance.now()-t0)).toFixed(1);
+        document.getElementById('liveInfo').textContent = `${d.n_total||0} objetos · ${fps} img/s`;
+      }catch(e){}
+      res();
+    }, 'image/jpeg', 0.7));
+  }
+  if(liveOn) setTimeout(liveLoop, 150);
+}
 function capturar(){
   const v = document.getElementById('video');
   if(!v.videoWidth){ alert('La cámara aún no está lista'); return; }
