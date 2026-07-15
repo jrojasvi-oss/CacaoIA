@@ -84,13 +84,16 @@ with st.expander("ℹ️ Conoce más — qué es, cómo se hizo, código y créd
         "- 🌱 Un aporte del **colectivo Siembre** a una ciencia y tecnología **accesible**.\n"
         "- 🆓 Software libre, modelos de IA abiertos.")
 
+st.info("© 2026 **CacaoIA** · Proyecto de **investigación** — Universidad Nacional de Colombia (Sede Palmira) · "
+        "Colectivo **Siembre** · Código: [github.com/jrojasvi-oss/CacaoIA](https://github.com/jrojasvi-oss/CacaoIA) · Software libre")
+
 if "perfil" not in st.session_state:
     st.session_state.perfil = None
 
 # --- Formulario inicial (preguntas fijas antes del chat) ---
 if st.session_state.perfil is None:
     st.subheader("Antes de empezar, cuéntame de ti 🌱")
-    with st.form("perfil"):
+    with st.form("form_perfil"):
         nombre = st.text_input("¿Cómo te llamas?")
         ubic = st.text_input("¿Dónde queda tu finca? (municipio y vereda)")
         cacao = st.radio("¿Tienes cacao?",
