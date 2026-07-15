@@ -25,6 +25,7 @@ from ultralytics import YOLO
 # Usa el modelo de despliegue que SI detecta (yolo_deploy); cae a yolo_best si no.
 MODEL_PATH = CFG["modelos"].get("yolo_deploy") or CFG["modelos"]["yolo_best"]
 MODEL_HOJAS = CFG["modelos"].get("yolo_hojas")   # 2do modelo: tipos de hoja (9 clases)
+MODEL_COCO = str(Path(CFG["proyecto"]["raiz"]) / "02_Motor_Entrenamiento" / "yolov8n.pt")  # COCO: detecta 'persona'
 CONF = CFG["modelos"]["yolo_conf"]
 
 BASE = Path(__file__).resolve().parent
@@ -36,6 +37,7 @@ REGISTRO = BASE / "dataset_campo" / "registro.csv"
 
 _model = None      # modelo enfermedad
 _model2 = None     # modelo hojas (9 clases)
+_model_coco = None # COCO: personas
 _NAMES = {}
 _NAMES2 = {}
 _COLORS = np.random.RandomState(42).randint(60, 255, size=(64, 3)).tolist()
@@ -53,22 +55,38 @@ REMAP = {
 
 
 def modelo():
-    """Carga AMBOS modelos: enfermedad + hojas (9 clases)."""
-    global _model, _model2, _NAMES, _NAMES2
+    """Carga los modelos: enfermedad + hojas (9 clases) + COCO (personas)."""
+    global _model, _model2, _model_coco, _NAMES, _NAMES2
     if _model is None:
         _model = YOLO(MODEL_PATH)
         _NAMES = dict(_model.names)
     if _model2 is None and MODEL_HOJAS and Path(MODEL_HOJAS).exists():
         _model2 = YOLO(MODEL_HOJAS)
         _NAMES2 = dict(_model2.names)
+    if _model_coco is None and Path(MODEL_COCO).exists():
+        _model_coco = YOLO(MODEL_COCO)
     return _model
+
+
+def _dentro(cx, cy, cajas):
+    return any(px1 <= cx <= px2 and py1 <= cy <= py2 for (px1, py1, px2, py2) in cajas)
 
 
 # ---------------- funciones puras ----------------
 def detectar(img_bgr, conf=CONF):
-    """Corre los DOS modelos (enfermedad + hojas) y une las detecciones."""
-    modelo()  # asegura ambos cargados
+    """Personas (COCO) + cacao (enfermedad + hojas). Descarta cacao que cae sobre un humano."""
+    modelo()
     dets = []
+    # 1) Personas -> para no confundir humanos con cacao
+    personas = []
+    if _model_coco is not None:
+        rc = _model_coco.predict(img_bgr, conf=0.35, classes=[0], verbose=False)[0]  # 0 = person
+        if rc.boxes is not None:
+            for box in rc.boxes.xyxy.cpu().numpy():
+                x1, y1, x2, y2 = map(int, box)
+                personas.append((x1, y1, x2, y2))
+                dets.append({"cls": -1, "nombre": "persona", "conf": 1.0, "bbox": [x1, y1, x2, y2]})
+    # 2) Cacao (2 modelos), filtrando lo que cae dentro de una persona
     for mdl, names in [(_model, _NAMES), (_model2, _NAMES2)]:
         if mdl is None:
             continue
@@ -79,6 +97,8 @@ def detectar(img_bgr, conf=CONF):
                                 res.boxes.cls.cpu().numpy().astype(int),
                                 res.boxes.conf.cpu().numpy()):
             x1, y1, x2, y2 = map(int, box)
+            if _dentro((x1 + x2) // 2, (y1 + y2) // 2, personas):
+                continue  # cae sobre un humano -> no es cacao
             raw = names.get(int(cls), str(int(cls)))
             dets.append({"cls": int(cls), "nombre": REMAP.get(raw, raw),
                          "conf": float(cf), "bbox": [x1, y1, x2, y2]})
@@ -107,6 +127,8 @@ def overlay_color_hojas(img_bgr, dets, umbral_rojo=0.52):
     over = img_bgr.copy()
     stats = []
     for d in dets:
+        if d["nombre"] == "persona":
+            continue
         x1, y1, x2, y2 = d["bbox"]
         roi = img_bgr[y1:y2, x1:x2].astype(np.float32)
         if roi.size == 0:
