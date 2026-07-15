@@ -94,11 +94,11 @@ with st.expander("ℹ️ Conoce más — qué es, cómo se hizo, código y créd
         "**modelo de lenguaje libre** para reconocer y conversar sobre cacao.\n\n"
         "- 🎓 Trabajo de grado, **Universidad Nacional de Colombia — Sede Palmira**.\n"
         "- 💻 Código abierto: [github.com/jrojasvi-oss/CacaoIA](https://github.com/jrojasvi-oss/CacaoIA)\n"
-        "- 🌱 Un aporte del **colectivo Siembre** a una ciencia y tecnología **accesible**.\n"
+        "- 🌱 Un aporte del **colectivo Siembra** a una ciencia y tecnología **accesible**.\n"
         "- 🆓 Software libre, modelos de IA abiertos.")
 
 st.info("© 2026 **CacaoIA** · Proyecto de **investigación** — Universidad Nacional de Colombia (Sede Palmira) · "
-        "Colectivo **Siembre** · Código: [github.com/jrojasvi-oss/CacaoIA](https://github.com/jrojasvi-oss/CacaoIA) · Software libre")
+        "Colectivo **Siembra** · Código: [github.com/jrojasvi-oss/CacaoIA](https://github.com/jrojasvi-oss/CacaoIA) · Software libre")
 
 if "perfil" not in st.session_state:
     st.session_state.perfil = None

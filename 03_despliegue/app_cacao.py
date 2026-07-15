@@ -47,6 +47,11 @@ def _color_de(nombre):
     """Color estable por nombre de clase (evita choques entre los 2 modelos)."""
     return _COLORS[hash(nombre) % len(_COLORS)]
 
+# Clases COCO de interes (persona + herramientas agro simples) -> nombre en español
+COCO_INTERES = {0: "persona", 43: "cuchillo/navaja", 76: "tijeras"}
+# Objetos que NO son cacao (no se les calcula pigmentacion)
+NO_CACAO = {"persona", "cuchillo/navaja", "tijeras", "objeto"}
+
 # Corrige nombres de clase mal escritos en el modelo, para mostrarlos bien
 REMAP = {
     "Fitoftora": "Phytophthora", "fitoftora": "Phytophthora", "Phytoftora": "Phytophthora",
@@ -80,12 +85,16 @@ def detectar(img_bgr, conf=CONF):
     # 1) Personas -> para no confundir humanos con cacao
     personas = []
     if _model_coco is not None:
-        rc = _model_coco.predict(img_bgr, conf=0.35, classes=[0], verbose=False)[0]  # 0 = person
+        rc = _model_coco.predict(img_bgr, conf=0.35, classes=list(COCO_INTERES.keys()), verbose=False)[0]
         if rc.boxes is not None:
-            for box in rc.boxes.xyxy.cpu().numpy():
+            for box, cls, cf in zip(rc.boxes.xyxy.cpu().numpy(),
+                                    rc.boxes.cls.cpu().numpy().astype(int),
+                                    rc.boxes.conf.cpu().numpy()):
                 x1, y1, x2, y2 = map(int, box)
-                personas.append((x1, y1, x2, y2))
-                dets.append({"cls": -1, "nombre": "persona", "conf": 1.0, "bbox": [x1, y1, x2, y2]})
+                nombre = COCO_INTERES.get(int(cls), "objeto")
+                if int(cls) == 0:          # persona -> para filtrar cacao falso encima
+                    personas.append((x1, y1, x2, y2))
+                dets.append({"cls": -1, "nombre": nombre, "conf": float(cf), "bbox": [x1, y1, x2, y2]})
     # 2) Cacao (2 modelos), filtrando lo que cae dentro de una persona
     for mdl, names in [(_model, _NAMES), (_model2, _NAMES2)]:
         if mdl is None:
@@ -127,7 +136,7 @@ def overlay_color_hojas(img_bgr, dets, umbral_rojo=0.52):
     over = img_bgr.copy()
     stats = []
     for d in dets:
-        if d["nombre"] == "persona":
+        if d["nombre"] in NO_CACAO:
             continue
         x1, y1, x2, y2 = d["bbox"]
         roi = img_bgr[y1:y2, x1:x2].astype(np.float32)
