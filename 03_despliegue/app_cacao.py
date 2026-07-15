@@ -214,8 +214,12 @@ def api_detect_frame():
         return jsonify({"error": "sin foto"}), 400
     img = cv2.imdecode(np.frombuffer(f.read(), np.uint8), cv2.IMREAD_COLOR)
     dets = detectar(img)
-    vis, conteo = anotar(img, dets)
-    return jsonify({"anotada": b64(vis), "conteo": conteo, "n_total": len(dets)})
+    conteo = {}
+    for d in dets:
+        conteo[d["nombre"]] = conteo.get(d["nombre"], 0) + 1
+    # solo coordenadas -> el navegador dibuja las cajas sobre el video fluido
+    salida = [{"nombre": d["nombre"], "conf": d["conf"], "bbox": d["bbox"]} for d in dets]
+    return jsonify({"dets": salida, "conteo": conteo, "n_total": len(dets)})
 
 
 def gen_frames():

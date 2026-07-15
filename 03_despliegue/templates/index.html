@@ -41,7 +41,10 @@
 
   <div class="card" id="camCard">
     <h3>📷 Cámara del dispositivo</h3>
-    <video id="video" autoplay playsinline muted></video>
+    <div id="camWrap" style="position:relative; display:inline-block; max-width:100%">
+      <video id="video" autoplay playsinline muted style="max-width:100%; display:block; border-radius:10px"></video>
+      <canvas id="overlay" style="position:absolute; left:0; top:0; pointer-events:none"></canvas>
+    </div>
     <div class="row" style="margin-top:10px">
       <button onclick="cambiarCamara()">🔄 Voltear cámara</button>
       <button id="liveBtn" onclick="toggleLive()">▶ Detección en vivo</button>
@@ -49,7 +52,6 @@
     </div>
     <div id="camEstado" class="muted"></div>
     <div class="muted" id="liveInfo" style="margin-top:6px"></div>
-    <img id="liveResult" style="margin-top:8px; display:none">
   </div>
 
   <div class="card">
@@ -118,8 +120,22 @@ let liveOn = false;
 function toggleLive(){
   liveOn = !liveOn;
   document.getElementById('liveBtn').textContent = liveOn ? '⏸ Pausar en vivo' : '▶ Detección en vivo';
-  document.getElementById('liveResult').style.display = liveOn ? 'block' : 'none';
+  if(!liveOn){ const cv=document.getElementById('overlay'); cv.getContext('2d').clearRect(0,0,cv.width,cv.height); }
   if(liveOn) liveLoop();
+}
+function dibujarCajas(dets){
+  const v = document.getElementById('video'), cv = document.getElementById('overlay');
+  cv.width = v.clientWidth; cv.height = v.clientHeight;
+  const sx = v.clientWidth/(v.videoWidth||1), sy = v.clientHeight/(v.videoHeight||1);
+  const ctx = cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.lineWidth = 2; ctx.font = 'bold 14px system-ui';
+  for(const d of dets){
+    const [x1,y1,x2,y2] = d.bbox; const col = d.nombre==='persona' ? '#e05a4a' : '#8bc34a';
+    ctx.strokeStyle = col; ctx.strokeRect(x1*sx, y1*sy, (x2-x1)*sx, (y2-y1)*sy);
+    const et = `${d.nombre} ${(d.conf*100).toFixed(0)}%`;
+    ctx.fillStyle = col; ctx.fillRect(x1*sx, y1*sy-16, ctx.measureText(et).width+6, 16);
+    ctx.fillStyle = '#08140a'; ctx.fillText(et, x1*sx+3, y1*sy-3);
+  }
 }
 async function liveLoop(){
   if(!liveOn) return;
@@ -127,20 +143,17 @@ async function liveLoop(){
   if(v && v.videoWidth){
     const c = document.createElement('canvas'); c.width = v.videoWidth; c.height = v.videoHeight;
     c.getContext('2d').drawImage(v, 0, 0);
-    const t0 = performance.now();
     await new Promise(res => c.toBlob(async b => {
       try{
         const fd = new FormData(); fd.append('foto', b, 'f.jpg');
         const r = await fetch('/api/detect_frame', { method:'POST', body:fd });
         const d = await r.json();
-        if(d.anotada) document.getElementById('liveResult').src = d.anotada;
-        const fps = (1000/(performance.now()-t0)).toFixed(1);
-        document.getElementById('liveInfo').textContent = `${d.n_total||0} objetos · ${fps} img/s`;
+        if(d.dets){ dibujarCajas(d.dets); document.getElementById('liveInfo').textContent = `${d.n_total||0} objetos`; }
       }catch(e){}
       res();
-    }, 'image/jpeg', 0.7));
+    }, 'image/jpeg', 0.6));
   }
-  if(liveOn) setTimeout(liveLoop, 150);
+  if(liveOn) setTimeout(liveLoop, 100);
 }
 function capturar(){
   const v = document.getElementById('video');
