@@ -179,6 +179,14 @@ def b64(img_bgr):
 app = Flask(__name__)
 
 
+@app.after_request
+def no_cache(resp):
+    """Evita que el navegador use una version vieja cacheada de la pagina."""
+    resp.headers["Cache-Control"] = "no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    return resp
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
