@@ -36,7 +36,16 @@ SISTEMA = (
     "¿de qué color está la mancha?, ¿cómo está el clima/humedad?, ¿qué edad tiene el árbol? "
     "Con esas respuestas das un diagnóstico y recomendaciones responsables. Eres experto en "
     "cacao (variedades, enfermedades, poda, cosecha, beneficio). Usa el contexto web si te lo "
-    "dan. Nunca inventes; si no sabes, dilo con humildad."
+    "dan. Para PRECIOS del cacao, la fuente OFICIAL es la Federación Nacional de Cacaoteros "
+    "(Fedecacao, fedecacao.com.co): cita siempre esa fuente y comparte el enlace. NUNCA inventes "
+    "un precio exacto; si no tienes el dato del día, dirige a la persona a consultarlo en "
+    "fedecacao.com.co (precio por kilo en Puntos Fedecacao y precio internacional de la tonelada). "
+    "Nunca inventes; si no sabes, dilo con humildad."
+)
+FEDECACAO = (
+    "[Fuente oficial de PRECIOS del cacao] Federación Nacional de Cacaoteros (Fedecacao). "
+    "El precio del día (por kilo en Puntos Fedecacao y la tonelada internacional en USD) se "
+    "publica en https://www.fedecacao.com.co/ — dirige ahí para el precio actualizado y cita la fuente."
 )
 
 
@@ -51,7 +60,11 @@ def buscar_web(consulta, n=3):
 
 
 def responder(mensaje, historial, perfil):
-    web = buscar_web(mensaje)
+    # Si preguntan por precio, busca dirigido en Fedecacao y añade la fuente oficial
+    es_precio = any(p in mensaje.lower() for p in ["precio", "cuánto vale", "cuanto vale", "cotiz", "cuánto pagan", "cuanto pagan", "mercado"])
+    web = buscar_web("precio del cacao Fedecacao Colombia hoy" if es_precio else mensaje)
+    if es_precio:
+        web = FEDECACAO + ("\n" + web if web else "")
     ctx_perfil = ""
     if perfil:
         ctx_perfil = (f"\n[Perfil del usuario] Nombre: {perfil['nombre']}. "
@@ -112,6 +125,7 @@ perfil = st.session_state.perfil
 if perfil["ubicacion"]:
     url = "https://www.google.com/maps/search/" + urllib.parse.quote(perfil["ubicacion"]) + "/data=!3m1!1e3"
     st.caption(f"📍 [Ver **{perfil['ubicacion']}** en Google Maps satélite]({url})")
+st.caption("💰 Precio oficial del cacao: [Fedecacao — fedecacao.com.co](https://www.fedecacao.com.co/)")
 
 if "hist" not in st.session_state:
     st.session_state.hist = []
