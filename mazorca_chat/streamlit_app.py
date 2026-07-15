@@ -1,44 +1,43 @@
 """🌰 Mazorca IA — Chatbot de cacao (Streamlit, modelo LIBRE)
-Asistente conversacional para estudiantes y agricultores del Valle del Cauca.
-- Modelo de lenguaje LIBRE y abierto (HuggingFace Inference).
-- Búsqueda WEB en vivo (DuckDuckGo) para dar datos reales.
-Ligero (sin torch/cv2) -> despliega rápido y anda bien en el celular.
+Parcero cacaotero del Valle: pregunta inicial (nombre, finca, cacao), conversa
+dinámico con repreguntas, usa búsqueda web y ubica en Google Maps satélite.
 """
 import os
+import urllib.parse
 import streamlit as st
 
 st.set_page_config(page_title="Mazorca IA", page_icon="🌰")
 
-# HF_TOKEN se pone en los Secretos de Streamlit Cloud (nunca en el código).
+
 def _token():
     try:
-        return st.secrets["HF_TOKEN"]          # 1) secrets.toml (Streamlit Cloud)
+        return st.secrets["HF_TOKEN"]
     except Exception:
         pass
     if os.environ.get("HF_TOKEN"):
-        return os.environ["HF_TOKEN"]          # 2) variable de entorno
+        return os.environ["HF_TOKEN"]
     try:
-        from huggingface_hub import get_token  # 3) token guardado por 'huggingface-cli login'
+        from huggingface_hub import get_token
         return get_token()
     except Exception:
         return None
 HF_TOKEN = _token()
-LLM_MODEL = os.environ.get("MAZORCA_LLM", "Qwen/Qwen2.5-7B-Instruct")  # libre, sin licencia gated
+LLM_MODEL = os.environ.get("MAZORCA_LLM", "Qwen/Qwen2.5-7B-Instruct")
+
 SISTEMA = (
-    "Eres 'Mazorca IA', una mazorca de cacao con alma de PARCERO del Valle del Cauca. "
-    "Hablas como un amigo campesino colombiano: cercano, cálido y con dialecto valluno/paisa "
-    "(usa expresiones como 'parcero', 'hágale', '¿bien o qué?', 'de una', 'sumercé' con respeto), "
-    "pero siempre claro y práctico. Eres experto en cacao (Theobroma cacao): variedades, "
-    "enfermedades como monilia (Moniliophthora roreri) y fitóftora (Phytophthora), cultivo, "
-    "poda, cosecha y beneficio. Si es una conversación nueva y aún no sabes de la persona, "
-    "salúdala como Mazorca IA y pregúntale con cariño: (1) de dónde es o dónde queda su finca, "
-    "y (2) si ya tiene cacao sembrado o apenas va a empezar. Da recomendaciones agronómicas "
-    "responsables. Si te dan contexto de una búsqueda web, úsalo. Nunca inventes; si no sabes, "
-    "dilo con humildad."
+    "Eres 'Mazorca IA', una mazorca de cacao con alma de PARCERO del Valle del Cauca, "
+    "creada en la Universidad Nacional de Colombia (Sede Palmira) como aporte a la "
+    "investigación, la innovación y la extensión rural. Hablas como un amigo campesino "
+    "colombiano: cálido, cercano, con dialecto valluno/paisa ('parcero', 'hágale', "
+    "'¿bien o qué?', 'de una', 'sumercé' con respeto), pero claro y práctico. "
+    "Conversa de forma DINÁMICA y natural: no sueltes párrafos enormes; responde corto y "
+    "HAZ REPREGUNTAS para entender mejor el caso. Por ejemplo, si hablan de monilia o "
+    "fitóftora, pregunta: ¿desde dónde empezó el daño, de arriba o de abajo de la mazorca?, "
+    "¿de qué color está la mancha?, ¿cómo está el clima/humedad?, ¿qué edad tiene el árbol? "
+    "Con esas respuestas das un diagnóstico y recomendaciones responsables. Eres experto en "
+    "cacao (variedades, enfermedades, poda, cosecha, beneficio). Usa el contexto web si te lo "
+    "dan. Nunca inventes; si no sabes, dilo con humildad."
 )
-BIENVENIDA = ("¡Quiubo, parcero! 🌰 Soy **Mazorca IA**, su compañero cacaotero del Valle. "
-              "Pa' ayudarle mejor, cuénteme dos cositas: ¿de dónde es o dónde le queda la finca? "
-              "¿Y ya tiene cacao sembrado o apenas va a arrancar? ¡Hágale, que aquí estoy pa' lo que necesite!")
 
 
 def buscar_web(consulta, n=3):
@@ -51,39 +50,76 @@ def buscar_web(consulta, n=3):
         return ""
 
 
-def responder(mensaje, historial):
+def responder(mensaje, historial, perfil):
     web = buscar_web(mensaje)
+    ctx_perfil = ""
+    if perfil:
+        ctx_perfil = (f"\n[Perfil del usuario] Nombre: {perfil['nombre']}. "
+                      f"Finca/ubicación: {perfil['ubicacion'] or 'no dijo'}. "
+                      f"Cacao: {perfil['cacao']}.")
     if not HF_TOKEN:
-        base = "🔑 El diálogo se activa al agregar **HF_TOKEN** en los Secretos de Streamlit."
-        return base + (f"\n\n**Encontré en la web:**\n{web}" if web else "")
+        return "🔑 El diálogo se activa con HF_TOKEN." + (f"\n\n**En la web:**\n{web}" if web else "")
     try:
         from huggingface_hub import InferenceClient
         cli = InferenceClient(model=LLM_MODEL, token=HF_TOKEN)
-        msgs = [{"role": "system", "content": SISTEMA}]
+        msgs = [{"role": "system", "content": SISTEMA + ctx_perfil}]
         msgs += [{"role": m["role"], "content": m["content"]} for m in historial[-8:]]
         contenido = mensaje + (f"\n\n[Contexto web]\n{web}" if web else "")
         msgs.append({"role": "user", "content": contenido})
-        out = cli.chat_completion(messages=msgs, max_tokens=500, temperature=0.4)
-        return out.choices[0].message.content
+        return cli.chat_completion(messages=msgs, max_tokens=450, temperature=0.5).choices[0].message.content
     except Exception as e:
         return f"(No pude usar el modelo: {str(e)[:120]})" + (f"\n\nInfo web:\n{web}" if web else "")
 
 
 # ---------- UI ----------
 st.title("🌰 Mazorca IA")
-st.caption("Asistente libre de cacao para el Valle del Cauca. Pregunta lo que quieras sobre variedades, enfermedades o cultivo.")
+st.caption("Tu parcero cacaotero del Valle · Universidad Nacional de Colombia — Sede Palmira")
+
+with st.expander("ℹ️ Conoce más — qué es, cómo se hizo, código y créditos"):
+    st.markdown(
+        "**CacaoIA** combina visión por computadora (**YOLO + SAM + ViT/DINOv2**) y un "
+        "**modelo de lenguaje libre** para reconocer y conversar sobre cacao.\n\n"
+        "- 🎓 Trabajo de grado, **Universidad Nacional de Colombia — Sede Palmira**.\n"
+        "- 💻 Código abierto: [github.com/jrojasvi-oss/CacaoIA](https://github.com/jrojasvi-oss/CacaoIA)\n"
+        "- 🌱 Un aporte del **colectivo Siembre** a una ciencia y tecnología **accesible**.\n"
+        "- 🆓 Software libre, modelos de IA abiertos.")
+
+if "perfil" not in st.session_state:
+    st.session_state.perfil = None
+
+# --- Formulario inicial (preguntas fijas antes del chat) ---
+if st.session_state.perfil is None:
+    st.subheader("Antes de empezar, cuéntame de ti 🌱")
+    with st.form("perfil"):
+        nombre = st.text_input("¿Cómo te llamas?")
+        ubic = st.text_input("¿Dónde queda tu finca? (municipio y vereda)")
+        cacao = st.radio("¿Tienes cacao?",
+                         ["Sí, ya tengo cultivo", "Quiero sembrar", "Apenas estoy aprendiendo"])
+        ok = st.form_submit_button("¡Hágale, empecemos! 🌰")
+    if ok:
+        st.session_state.perfil = {"nombre": nombre.strip() or "parcero", "ubicacion": ubic.strip(), "cacao": cacao}
+        n = st.session_state.perfil["nombre"]
+        st.session_state.hist = [{"role": "assistant",
+            "content": f"¡Quiubo, {n}! 🌰 Un gusto. Soy Mazorca IA. Cuénteme, ¿en qué le puedo ayudar hoy con su cacao? "
+                       f"Si es por una enfermedad, mándeme cómo se ve y le voy preguntando pa' afinar el diagnóstico."}]
+        st.rerun()
+    st.stop()
+
+perfil = st.session_state.perfil
+if perfil["ubicacion"]:
+    url = "https://www.google.com/maps/search/" + urllib.parse.quote(perfil["ubicacion"]) + "/data=!3m1!1e3"
+    st.caption(f"📍 [Ver **{perfil['ubicacion']}** en Google Maps satélite]({url})")
 
 if "hist" not in st.session_state:
-    st.session_state.hist = [{"role": "assistant", "content": BIENVENIDA}]
-
+    st.session_state.hist = []
 for m in st.session_state.hist:
     st.chat_message(m["role"]).write(m["content"])
 
-if prompt := st.chat_input("¿Cómo controlo la monilia? ¿Qué variedad de cacao me conviene?"):
+if prompt := st.chat_input("Escríbele a Mazorca IA…"):
     st.chat_message("user").write(prompt)
     st.session_state.hist.append({"role": "user", "content": prompt})
     with st.chat_message("assistant"):
         with st.spinner("Pensando…"):
-            resp = responder(prompt, st.session_state.hist)
+            resp = responder(prompt, st.session_state.hist, perfil)
         st.write(resp)
     st.session_state.hist.append({"role": "assistant", "content": resp})
