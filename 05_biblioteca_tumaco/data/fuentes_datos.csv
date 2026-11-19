@@ -1,0 +1,9 @@
+Fuente,Qué trae,Uso
+EVA – Evaluaciones Agropecuarias Municipales (UPRA),"Área, producción y rendimiento por municipio y año",Tendencia de Tumaco
+SIPRA – Zonificación de aptitud para cacao comercial (UPRA),"Aptitud alta, media, baja y no apta",Estratificar fincas
+Agronet (MADR),Series y precios,Contexto nacional
+Censo Nacional Agropecuario 2014 (DANE),Unidades productivas y prácticas,Marco muestral
+SIPSA (DANE) y precios Fedecacao,Precios de insumos y grano,Análisis económico
+IDEAM y boletines agroclimáticos de Nariño,Clima y pronóstico ENOS,Covariables y calendario
+IGAC y SoilGrids,Suelos,Covariables de suelo
+Sentinel-2 y Global Forest Watch,Cobertura de dosel,Sombra por finca

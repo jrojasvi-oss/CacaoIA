@@ -1,0 +1,4 @@
+Base,Fecha,Cadena,Registros,Nota
+Scopus,2026-11-18,"TITLE-ABS-KEY((cacao OR cocoa OR ""Theobroma cacao"") AND (Tumaco OR Nariño OR Narino OR ""Colombian Pacific"" OR ""Pacific coast of Colombia"" OR ""Pacífico colombiano""))",20,Acceso UNAL
+"Web of Science, todas las bases",2026-11-18,"TS=((cacao OR cocoa OR ""Theobroma cacao"") AND (Tumaco OR Nariño OR Narino OR ""Colombian Pacific"" OR ""Pacific coast of Colombia"" OR ""Pacifico colombiano""))",55,Incluye SciELO y tesis ProQuest
+EBSCO Biological & Agricultural Index Plus,2026-11-18,"(cacao OR cocoa) AND (Tumaco OR Nariño OR Narino OR ""Colombian Pacific"")",3,
