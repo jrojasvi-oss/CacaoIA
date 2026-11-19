@@ -7,7 +7,8 @@ Base abierta de la revisión de alcance (PRISMA-ScR) sobre el cacao nativo fino 
 ## Contenido
 
 - `index.html`: catálogo con buscador y filtros, modelo de proceso e inventario de fuentes de datos.
-- `docs/Cacao_Tumaco_modelos_investigacion.pdf`: documento de síntesis y modelos de investigación propuestos.
+- `docs/Cacao_Tumaco_modelos_investigacion.pdf` y `.docx`: documento completo de síntesis y modelos de investigación propuestos.
+- `data/Revision_cacao_Tumaco_datos.xlsx`: base de datos completa (estudios, complementarios, actores, búsquedas y conteo PRISMA).
 - `data/estudios.csv`: 56 documentos incluidos en el conteo PRISMA (D = bases indexadas, G = literatura gris).
 - `data/complementarios.csv`: registros de búsqueda complementaria (C), aún fuera del conteo PRISMA.
 - `data/busquedas.csv`: bitácora de búsqueda (bases, fecha, cadenas, registros).
