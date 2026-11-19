@@ -4,6 +4,8 @@ Carpeta **limpia y ordenada** del proyecto, lista para subir a repositorios. Con
 
 > El proyecto original (raíz `PROYECTO_CACAO_IA/`) **no se toca**. Aquí solo vive lo relevante y funcional.
 
+> 📚 **Nuevo — Biblioteca digital del cacao de Tumaco** (revisión PRISMA-ScR y modelos de investigación): [página web](https://jrojasvi-oss.github.io/CacaoIA/05_biblioteca_tumaco/) · [documento completo en PDF](05_biblioteca_tumaco/docs/Cacao_Tumaco_modelos_investigacion.pdf) · [Word](05_biblioteca_tumaco/docs/Cacao_Tumaco_modelos_investigacion.docx) · [base de datos en Excel](05_biblioteca_tumaco/data/Revision_cacao_Tumaco_datos.xlsx) · [carpeta](05_biblioteca_tumaco/)
+
 ---
 
 ## 🤖 Despliegue de agentes (economía de tokens)
