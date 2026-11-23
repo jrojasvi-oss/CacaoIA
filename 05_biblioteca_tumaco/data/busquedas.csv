@@ -1,4 +1,11 @@
-Base,Fecha,Cadena,Registros,Nota
-Scopus,2026-11-18,"TITLE-ABS-KEY((cacao OR cocoa OR ""Theobroma cacao"") AND (Tumaco OR Nariño OR Narino OR ""Colombian Pacific"" OR ""Pacific coast of Colombia"" OR ""Pacífico colombiano""))",20,Acceso UNAL
-"Web of Science, todas las bases",2026-11-18,"TS=((cacao OR cocoa OR ""Theobroma cacao"") AND (Tumaco OR Nariño OR Narino OR ""Colombian Pacific"" OR ""Pacific coast of Colombia"" OR ""Pacifico colombiano""))",55,Incluye SciELO y tesis ProQuest
-EBSCO Biological & Agricultural Index Plus,2026-11-18,"(cacao OR cocoa) AND (Tumaco OR Nariño OR Narino OR ""Colombian Pacific"")",3,
+Base,Fecha,Cadena,Identificados,Revisados,Ya incluidos o duplicados,Excluidos,Nuevos incluidos,Nota
+Scopus,2026-11-18,"TITLE-ABS-KEY((cacao OR cocoa OR ""Theobroma cacao"") AND (Tumaco OR Nariño OR Narino OR ""Colombian Pacific"" OR ""Pacific coast of Colombia"" OR ""Pacífico colombiano""))",20,,,,,Búsqueda 1
+"Web of Science, todas las bases",2026-11-18,TS=(misma ecuación),55,,,,,Búsqueda 1
+EBSCO Biological & Agricultural Index Plus,2026-11-18,"(cacao OR cocoa) AND (Tumaco OR Nariño OR Narino OR ""Colombian Pacific"")",3,,,,,Búsqueda 1
+AGRIS (FAO),2026-11-23,(cacao OR cocoa) AND (Tumaco OR Nariño OR Narino),210,107,43,52,12,210 registros en 107 fichas únicas
+SciELO,2026-11-23,"(cacao OR cocoa) AND (Tumaco OR Nariño OR Narino OR ""Pacífico colombiano"")",14,14,12,1,1,
+SIRED (Universidad de Nariño),2026-11-23,Título contiene «cacao»,70,70,15,22,33,
+Repositorio AGROSAVIA,2026-11-23,"cacao AND (tumaco OR ""pacífico nariñense"" OR ""El Mira"")",12,12,2,8,2,
+Redalyc,2026-11-23,cacao tumaco (texto completo),7558,10,2,8,0,Exploratoria
+Google Scholar,2026-11-23,cacao Tumaco Theobroma,,,,,,Pendiente: CAPTCHA
+CAB Abstracts,,,,,,,,Pendiente: registro
