@@ -1,0 +1,110 @@
+"groups","words","name_full","n","centrality","density","rcentrality","rdensity","name","color","freq"
+1,"diversidad genetica 4
+estructura poblacional 2","diversidad genetica
+estructura poblacional",2,0,43.75,12,4,"diversidad genetica","#E41A1C80",6
+2,"cadmio suelos 4
+ecuador peru 4
+suelos cacaoteros 4
+acumulacion cadmio 2
+aprendizaje automatico 2
+cordillera narino 2","cadmio suelos
+ecuador peru
+suelos cacaoteros",6,0.375,45.8333333333333,27,5,"cadmio suelos","#377EB880",18
+3,"caracterizacion morfologica 5
+clones regionales 4
+fino aroma 4
+arboles elite 3
+costa pacifica 3
+elite tumaco 2
+morfologica arboles 2
+pacifica narino 2
+phytophthora palmivora 2","caracterizacion morfologica
+clones regionales
+fino aroma",9,0.291666666666667,64.537037037037,25.5,20,"caracterizacion morfologica","#4DAF4A80",27
+4,"consejo comunitario 10
+sistema agroforestal 6
+sistemas produccion 6
+mira frontera 5
+caracterizacion sistemas 3
+comunitario mira 3
+luis robles 3
+san luis 3
+tipificacion sistemas 3
+caracterizacion socioeconomica 2","consejo comunitario
+sistema agroforestal
+sistemas produccion",21,0.605555555555556,74.4656084656085,28,22,"consejo comunitario","#984EA380",66
+5,"bosques saf 2
+carbono bosques 2
+carbono organico 2
+reduccion emisiones 2
+saf pacifico 2","bosques saf
+carbono bosques
+carbono organico",5,0,100,12,26,"bosques saf","#FF7F0080",10
+6,"sistema productivo 3
+caracterizacion sistema 2
+productoras tumaco 2
+sierra nevada 2
+sistema tradicional 2","sistema productivo
+caracterizacion sistema
+productoras tumaco",5,0.25,68.3333333333333,24,21,"sistema productivo","#A6562880",11
+7,"absorcion cadmio 2
+formadores micorrizas 2
+hongos formadores 2
+micorrizas arbusculares 2","absorcion cadmio
+formadores micorrizas
+hongos formadores",4,0,93.75,12,25,"absorcion cadmio","#F781BF80",8
+8,"composicion quimica 2
+compuestos volatiles 2
+inoculacion levadura 2
+presecado solar 2
+solar inoculacion 2","composicion quimica
+compuestos volatiles
+inoculacion levadura",5,0,110,12,27,"composicion quimica","#99999980",10
+9,"platano tumaco 3
+agroforestal caoba 2
+coco platano 2
+inicial sistema 2
+silvoagricola coco 2
+sistema silvoagricola 2","platano tumaco
+agroforestal caoba
+coco platano",6,0,122.222222222222,12,28,"platano tumaco","#66C2A580",13
+10,"chilvi tumaco 2
+familias cacaoteras 2","chilvi tumaco
+familias cacaoteras",2,0,62.5,12,18,"chilvi tumaco","#FC8D6280",4
+11,"diversidad filogenetica 3
+parientes silvestres 3
+filogenetica genotipos 2","diversidad filogenetica
+parientes silvestres
+filogenetica genotipos",3,0,53.7037037037037,12,15,"diversidad filogenetica","#8DA0CB80",8
+12,"bioacumulacion cadmio 2
+especies forestales 2","bioacumulacion cadmio
+especies forestales",2,0,62.5,12,18,"bioacumulacion cadmio","#E78AC380",4
+13,"buenas practicas 3
+practicas agricolas 2","buenas practicas
+practicas agricolas",2,0,58.3333333333333,12,16,"buenas practicas","#A6D85480",5
+14,"moniliophthora roreri 6","moniliophthora roreri",1,0,16.6666666666667,12,1,"moniliophthora roreri","#FFD92F80",6
+15,"norte santander 2","norte santander",1,0,50,12,10,"norte santander","#B3B3B380",2
+16,"sistemas agroforestales 4","sistemas agroforestales",1,0.291666666666667,25,25.5,3,"sistemas agroforestales","#A6CEE380",4
+17,"san jose 2","san jose",1,0,50,12,10,"san jose","#1F78B480",2
+18,"valle cauca 5","valle cauca",1,0,20,12,2,"valle cauca","#B2DF8A80",5
+19,"cultivos ilicitos 2","cultivos ilicitos",1,0,50,12,10,"cultivos ilicitos","#33A02C80",2
+20,"soils santander 2","soils santander",1,0,50,12,10,"soils santander","#FB9A9980",2
+21,"banco germoplasma 2
+caracterizacion clones 2","banco germoplasma
+caracterizacion clones",2,0,62.5,12,18,"banco germoplasma","#E31A1C80",4
+22,"mejoramiento genetico 5
+programa mejoramiento 4
+actual programa 2
+genetico agrosavia 2","mejoramiento genetico
+programa mejoramiento
+actual programa",4,0,76.25,12,24,"mejoramiento genetico","#FDBF6F80",13
+23,"sistema produccion 2","sistema produccion",1,0,50,12,10,"sistema produccion","#FF7F0080",2
+24,"cadmio cultivo 2","cadmio cultivo",1,0,50,12,10,"cadmio cultivo","#CAB2D680",2
+25,"caracterizacion molecular 2","caracterizacion molecular",1,0,50,12,10,"caracterizacion molecular","#6A3D9A80",2
+26,"innovacion verde 3
+roberto payan 3","innovacion verde
+roberto payan",2,0,50,12,10,"innovacion verde","#B1592880",6
+27,"desarrollo agroindustrial 2
+productores tumaco 2","desarrollo agroindustrial
+productores tumaco",2,0,75,12,23,"desarrollo agroindustrial","#8DD3C780",4
+28,"seleccion arboles 2","seleccion arboles",1,0,50,12,10,"seleccion arboles","#BEBADA80",2
