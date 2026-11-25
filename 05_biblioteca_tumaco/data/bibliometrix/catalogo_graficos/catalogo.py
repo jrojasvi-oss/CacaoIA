@@ -34,16 +34,22 @@ F=[('Mapas de calor','g01_calor_tema_anio','Tema por año (2005–2026)','Cuánt
 ('Sanidad: modos de manejo','g28_calor_agente_problema','Mapa de calor: agente de control biológico por problema','Trichoderma, Bacillus, Clonostachys, endófitos y entomopatógenos frente a cada problema en Colombia.'),
 ('Sanidad: modos de manejo','g29_colombia_vs_mundo_biocontrol','Control biológico: Colombia frente a otros países','Registros que nombran el agente y el patógeno; Bacillus contra Phytophthora tiene 1 en Colombia y 18 afuera.'),
 ('Sanidad: modos de manejo','g30_sankey_problema_manejo_region','Flujos: problema sanitario, manejo y región','Diagrama de tres columnas que conecta cada problema con su manejo y la región donde se estudió.'),
-('Sanidad: modos de manejo','g32_red_palabras_sanidad','Red de palabras de los títulos de sanidad','Palabras de sanidad que aparecen juntas en los títulos, agrupadas por comunidades.')]
+('Sanidad: modos de manejo','g32_red_palabras_sanidad','Red de palabras de los títulos de sanidad','Palabras de sanidad que aparecen juntas en los títulos, agrupadas por comunidades.'),
+('Sanidad: especies y distribución','g33_calor_especie_departamento','Mapa de calor: patógeno o plaga por departamento','Dónde se ha estudiado cada especie; Antioquia, Santander y Norte de Santander concentran la moniliasis.'),
+('Sanidad: especies y distribución','g34_calor_especie_enfoque','Mapa de calor: patógeno o plaga por enfoque de investigación','Control, patogenicidad, estudios moleculares y genómicos, epidemiología, diversidad del patógeno y resistencia.'),
+('Sanidad: especies y distribución','g35_cuerdas_especie_departamento','Diagrama de cuerdas: especie y departamento','Anillo con las especies a la derecha y los departamentos a la izquierda; cada cuerda une una especie con un departamento.'),
+('Sanidad: especies y distribución','g36_red_molecular_especie_depto_enfoque','Red tipo molecular: especie, departamento y enfoque','Esferas unidas cuando aparecen en al menos dos documentos; el grosor indica cuántos.'),
+('Sanidad: especies y distribución','g37_anillos_especie_departamento','Anillos: especie y departamento','Círculo interno con cada patógeno o plaga y externo con los departamentos donde se estudió.'),
+('Sanidad: especies y distribución','g38_barras_circulares_departamento','Barras circulares por departamento','Documentos por departamento, apilados por especie; el Valle aparece con 6.')]
 with PdfPages('g15/Catalogo_graficos_bibliometricos_cacao.pdf') as pdf:
     fig=plt.figure(figsize=(11,8.5));fig.text(.07,.82,'Catálogo de gráficos bibliométricos',fontsize=24,color='#191919',weight='bold')
     fig.text(.07,.76,'Biblioteca de cacao del suroccidente colombiano · 387 documentos · 25 nov 2026',fontsize=13,color='#666666')
-    fig.text(.07,.715,'Elige por número los gráficos que quieres en el informe. Del 22 al 32, sanidad: plagas, enfermedades y modos de manejo.',fontsize=12,color='#191919')
-    y=.685;cur=None
+    fig.text(.07,.715,'Elige por número los gráficos que quieres en el informe. Del 22 al 38, sanidad.',fontsize=12,color='#191919')
+    y=.69;cur=None
     for i,(g,_,t,_) in enumerate(F,1):
         if g!=cur:
-            y-=.004;fig.text(.07,y,g,fontsize=10,weight='bold',color='#257de0');y-=.019;cur=g
-        fig.text(.09,y,f'{i:>2}.  {t}',fontsize=8.6,color='#191919');y-=.0148
+            y-=.004;fig.text(.07,y,g,fontsize=9.5,weight='bold',color='#257de0');y-=.017;cur=g
+        fig.text(.09,y,f'{i:>2}.  {t}',fontsize=8,color='#191919');y-=.0128
     pdf.savefig(fig);plt.close(fig)
     for i,(g,f,t,d) in enumerate(F,1):
         im=Image.open(f'g15/{f}.png')
