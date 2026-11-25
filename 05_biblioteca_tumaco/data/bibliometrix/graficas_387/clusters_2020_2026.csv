@@ -1,0 +1,115 @@
+"groups","words","name_full","n","centrality","density","rcentrality","rdensity","name","color","freq"
+1,"suelos cacaoteros 3
+aprendizaje automatico 2
+cordillera narino 2","suelos cacaoteros
+aprendizaje automatico
+cordillera narino",3,0,55.5555555555556,8.5,14,"suelos cacaoteros","#E41A1C80",7
+2,"moniliophthora roreri 17
+pod rot 6
+frosty pod 5
+phytophthora spp 5
+roreri cif 4
+agroforestry systems 3
+cif par 3
+essential oil 3
+trichoderma spp 3
+black pod 2","moniliophthora roreri
+pod rot
+frosty pod",25,1.50980392156863,100.184836601307,26,24,"moniliophthora roreri","#377EB880",81
+3,"cadmio suelos 4
+ecuador peru 3
+sierra nevada 3
+acumulacion cadmio 2
+cacao production 2
+nevada santa 2
+santa marta 2
+sistema productivo 2","cadmio suelos
+ecuador peru
+sierra nevada",8,0.333333333333333,79.6875,22,20,"cadmio suelos","#4DAF4A80",20
+4,"norte santander 4
+santander colombia 4
+bacterial composition 2
+caracterizacion molecular 2
+fitopatogeno moniliophthora 2
+natural low 2
+soils natural 2","norte santander
+santander colombia
+bacterial composition",7,0.375,85.7142857142857,23,22,"norte santander","#984EA380",18
+5,"theobroma cacao 18
+cacao theobroma 9
+buenas practicas 2
+cadmium tolerant 2
+cultivated soils 2
+huila colombia 2
+moniliophthora perniciosa 2
+native cadmium 2
+nuevo cultivar 2
+obtencion nuevo 2","theobroma cacao
+cacao theobroma
+buenas practicas",13,0.939869281045752,83.974358974359,25,21,"theobroma cacao","#FF7F0080",49
+6,"sistemas produccion 6
+consejo comunitario 4
+tipificacion sistemas 3
+comunitario rio 2
+produccion tradicionales 2
+saf tradicionales 2","sistemas produccion
+consejo comunitario
+tipificacion sistemas",6,0.0555555555555556,65.2777777777778,17,17,"sistemas produccion","#A6562880",19
+7,"cocoa beans 4
+deep learning 4
+cocoa pods 3","cocoa beans
+deep learning
+cocoa pods",3,0,37.5,8.5,1,"cocoa beans","#F781BF80",11
+8,"cultivo cacao 3
+antioquia colombia 2
+cacao antioquia 2","cultivo cacao
+antioquia colombia
+cacao antioquia",3,0.5,72.2222222222222,24,19,"cultivo cacao","#99999980",7
+9,"bioacumulacion cadmio 2
+especies forestales 2
+mira frontera 2","bioacumulacion cadmio
+especies forestales
+mira frontera",3,0,66.6666666666667,8.5,18,"bioacumulacion cadmio","#66C2A580",6
+10,"mejoramiento genetico 4
+programa mejoramiento 4
+estado actual 3
+actual programa 2
+genetico agrosavia 2","mejoramiento genetico
+programa mejoramiento
+estado actual",5,0,91.6666666666667,8.5,23,"mejoramiento genetico","#FC8D6280",15
+11,"moniliophthora spp 2","moniliophthora spp",1,0.25,50,19.5,7,"moniliophthora spp","#8DA0CB80",2
+12,"sistemas agroforestales 3
+composicion floristica 2","sistemas agroforestales
+composicion floristica",2,0,58.3333333333333,8.5,15,"sistemas agroforestales","#E78AC380",5
+13,"cocoa crop 2
+colombia insights 2","cocoa crop
+colombia insights",2,0.25,62.5,19.5,16,"cocoa crop","#A6D85480",4
+14,"carbono organico 2","carbono organico",1,0.25,50,19.5,7,"carbono organico","#FFD92F80",2
+15,"cocoa crops 2","cocoa crops",1,0.25,50,19.5,7,"cocoa crops","#B3B3B380",2
+16,"cacao crops 2","cacao crops",1,0,50,8.5,7,"cacao crops","#A6CEE380",2
+17,"bosques saf 2
+carbono bosques 2
+reduccion emisiones 2
+saf pacifico 2","bosques saf
+carbono bosques
+reduccion emisiones",4,0,106.25,8.5,25.5,"bosques saf","#1F78B480",8
+18,"seleccion arboles 2","seleccion arboles",1,0,50,8.5,7,"seleccion arboles","#B2DF8A80",2
+19,"puerto asis 2","puerto asis",1,0,50,8.5,7,"puerto asis","#33A02C80",2
+20,"diversidad filogenetica 3
+parientes silvestres 3
+filogenetica genotipos 2","diversidad filogenetica
+parientes silvestres
+filogenetica genotipos",3,0,53.7037037037037,8.5,13,"diversidad filogenetica","#FB9A9980",8
+21,"innovacion verde 3
+roberto payan 3","innovacion verde
+roberto payan",2,0,50,8.5,7,"innovacion verde","#E31A1C80",6
+22,"composicion quimica 2
+inoculacion levadura 2
+presecado solar 2
+solar inoculacion 2","composicion quimica
+inoculacion levadura
+presecado solar",4,0,106.25,8.5,25.5,"composicion quimica","#FDBF6F80",8
+25,"valle cauca 2","valle cauca",1,0,50,8.5,7,"valle cauca","#6A3D9A80",2
+27,"socioeconomica sistema 2","socioeconomica sistema",1,0,50,8.5,7,"socioeconomica sistema","#8DD3C780",2
+28,"fino aroma 2","fino aroma",1,0,50,8.5,7,"fino aroma","#BEBADA80",2
+31,"mazorcas cacao 2","mazorcas cacao",1,0,50,8.5,7,"mazorcas cacao","#FDB46280",2

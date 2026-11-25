@@ -1,0 +1,68 @@
+"groups","words","name_full","n","centrality","density","rcentrality","rdensity","name","color","freq"
+1,"cacao colombia 2","cacao colombia",1,0,50,6.5,8,"cacao colombia","#E41A1C80",2
+2,"suelos cacaoteros 2","suelos cacaoteros",1,0,50,6.5,8,"suelos cacaoteros","#377EB880",2
+3,"moniliophthora perniciosa 3","moniliophthora perniciosa",1,0.166666666666667,33.3333333333333,15,3,"moniliophthora perniciosa","#4DAF4A80",3
+4,"moniliophthora roreri 24
+theobroma cacao 12
+cacao theobroma 8
+cif par 5
+contra moniliophthora 5
+roreri cif 5
+control biologico 4
+diversidad genetica 3
+actividad antifungica 2
+biologico moniliophthora 2","moniliophthora roreri
+theobroma cacao
+cacao theobroma",16,1.85694444444444,68.6779513888889,22,17,"moniliophthora roreri","#984EA380",82
+5,"norte santander 5
+cacao norte 2
+cepas nativas 2","norte santander
+cacao norte
+cepas nativas",3,0.35,50,18,8,"norte santander","#FF7F0080",9
+6,"clones regionales 4","clones regionales",1,0.125,25,13,2,"clones regionales","#A6562880",4
+7,"consejo comunitario 5
+comunitario mira 2
+mira frontera 2","consejo comunitario
+comunitario mira
+mira frontera",3,0.14,70,14,18,"consejo comunitario","#F781BF80",9
+8,"fino aroma 2","fino aroma",1,0,50,6.5,8,"fino aroma","#99999980",2
+9,"cultivo cacao 5
+control moniliasis 2
+monilia moniliophthora 2
+spp control 2","cultivo cacao
+control moniliasis
+monilia moniliophthora",4,1.15,56.25,21,13,"cultivo cacao","#66C2A580",11
+10,"pequena escala 2
+trichoderma spp 2","pequena escala
+trichoderma spp",2,0.25,62.5,16,14.5,"pequena escala","#FC8D6280",4
+11,"agroforestal caoba 2
+platano tumaco 2","agroforestal caoba
+platano tumaco",2,0,62.5,6.5,14.5,"agroforestal caoba","#8DA0CB80",4
+12,"sistema productivo 2","sistema productivo",1,0,50,6.5,8,"sistema productivo","#E78AC380",2
+13,"sistema agroforestal 5","sistema agroforestal",1,0.6,20,20,1,"sistema agroforestal","#A6D85480",5
+14,"moniliophthora spp 2","moniliophthora spp",1,0,50,6.5,8,"moniliophthora spp","#FFD92F80",2
+15,"archivo computador 3
+carmenta foraseminis 2
+evaluacion incidencia 2","archivo computador
+carmenta foraseminis
+evaluacion incidencia",3,0.416666666666667,63.8888888888889,19,16,"archivo computador","#B3B3B380",7
+16,"caracterizacion morfologica 4
+arboles elite 2
+elite tumaco 2
+morfologica arboles 2","caracterizacion morfologica
+arboles elite
+elite tumaco",4,0.3125,100,17,21.5,"caracterizacion morfologica","#A6CEE380",10
+17,"luis robles 2
+san luis 2","luis robles
+san luis",2,0,75,6.5,19.5,"luis robles","#1F78B480",4
+18,"phytophthora palmivora 2","phytophthora palmivora",1,0,50,6.5,8,"phytophthora palmivora","#B2DF8A80",2
+19,"santander colombia 2","santander colombia",1,0,50,6.5,8,"santander colombia","#33A02C80",2
+20,"desarrollo agroindustrial 2
+productores tumaco 2","desarrollo agroindustrial
+productores tumaco",2,0,75,6.5,19.5,"desarrollo agroindustrial","#FB9A9980",4
+21,"causal agent 2
+pod rot 2
+roreri causal 2","causal agent
+pod rot
+roreri causal",3,0,100,6.5,21.5,"causal agent","#E31A1C80",6
+37,"buenas practicas 2","buenas practicas",1,0,50,6.5,8,"buenas practicas","#FFFFFF00",2
