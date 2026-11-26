@@ -1,31 +1,48 @@
-# Biblioteca digital · Cacao de Tumaco
+# Biblioteca digital · Cacao del suroccidente colombiano
 
-Base abierta de la revisión de alcance (PRISMA-ScR) sobre el cacao nativo fino y de aroma de Tumaco y el Pacífico nariñense.
+Base abierta de la revisión de alcance (PRISMA-ScR) sobre el cacao de Tumaco, el Pacífico nariñense, el Cauca y el Valle del Cauca, con dos líneas temáticas añadidas en la fase 4: inteligencia artificial en cacao y sanidad del cultivo.
 
-**Sitio (GitHub Pages):** https://jrojasvi-oss.github.io/CacaoIA/05_biblioteca_tumaco/
+**Sitio (GitHub Pages):** https://jrojasvi-oss.github.io/CacaoIA/05_biblioteca_tumaco/ — catálogo con buscador y filtros de los 387 documentos.
 
-## Contenido
+## Estado (25 nov 2026)
 
-- `index.html`: catálogo con buscador y filtros, modelo de proceso e inventario de fuentes de datos.
-- `docs/Cacao_Tumaco_modelos_investigacion.pdf` y `.docx`: documento completo de síntesis y modelos de investigación propuestos.
-- `data/Revision_cacao_Tumaco_datos.xlsx`: base de datos completa (estudios, complementarios, actores, búsquedas y conteo PRISMA).
-- `data/estudios.csv`: 56 documentos incluidos en el conteo PRISMA (D = bases indexadas, G = literatura gris).
-- `data/complementarios.csv`: búsqueda complementaria (C01–C05 entran al conteo; C06 y C07 son contexto).
-- `data/ampliacion.csv`: 48 documentos de la ampliación del 23 nov 2026 (AGRIS, SciELO, SIRED, AGROSAVIA).
-- `data/valle.csv`: 106 documentos de la fase Valle del Cauca / ruta suroccidental (Scopus, AGRIS y búsquedas dirigidas).
-- `data/Revision_cacao_ruta_suroccidental_datos.xlsx` y `docs/Ruta_suroccidental_cacao.pdf|docx`: base completa (215) y documento de la ruta suroccidental.
-- `data/busquedas.csv`: bitácora de búsqueda (bases, fecha, cadenas, registros).
-- `data/fuentes_datos.csv`: fuentes de datos secundarias.
-- `scripts/construir_pagina.py`: genera `index.html` a partir de los CSV.
+- **387 documentos colombianos** incluidos de **3.277 registros identificados** en cuatro fases (18 a 24 nov 2026), más un corpus aparte de **246 estudios de IA en cacao** de otros países.
+- Fase 1 Tumaco: 394 registros, 109 incluidos (Scopus, Web of Science, EBSCO, AGRIS, SciELO, SIRED, AGROSAVIA, Redalyc y literatura gris).
+- Fase 2 Valle del Cauca y ruta: 378 registros, 106 incluidos (Scopus, AGRIS y búsqueda web dirigida).
+- Fase 3 OpenAlex: 914 registros, 55 incluidos (vía Publish or Perish).
+- Fase 4 IA y sanidad: 1.591 registros, 117 colombianos y 246 de IA mundial (OpenAlex vía Publish or Perish).
+- Tamizaje inicial con IA (Claude, Anthropic) y verificación humana pendiente: todas las inclusiones y 20 % de las exclusiones (semilla 2026), y segundo revisor ciego en Rayyan con kappa de Cohen.
 
-## Método
+## Informes (`informes/`)
 
-**Total actual: 215 documentos** (109 de Tumaco + 106 de la ruta suroccidental). 
-Búsqueda del 18 de noviembre de 2026 en Scopus, Web of Science y EBSCO (acceso institucional, Universidad Nacional de Colombia). 78 registros identificados, 23 duplicados, 55 tamizados, 11 excluidos, 44 incluidos desde bases y 12 de literatura gris: 56 documentos. Ampliación (23 nov 2026): AGRIS 210, SciELO 14, SIRED 70 y AGROSAVIA 12 registros; 203 revisados, 48 nuevos incluidos; más 5 complementarios. Fase Valle del Cauca (23 nov 2026): Scopus 115 únicos y AGRIS 67, con 37 y 18 incluidos, más 16 fuentes de búsquedas dirigidas; segunda ronda temática en AGRIS (24 nov): 196 únicos, 35 incluidos. Total fase: 106 nuevos. Criterios, decisiones de tamizaje, muestra de verificación y archivo RIS en `data/tamizaje/`. La extracción, el tamizaje y la codificación se hicieron con apoyo de inteligencia artificial (Claude, Anthropic), con verificación del autor.
+| Archivo | Qué es |
+|---|---|
+| `Informe_avance_revision_cacao_suroccidente.pdf` / `.docx` | Informe de avance: método, 35 ecuaciones de búsqueda, tabla y diagrama PRISMA, resultados, IA y sanidad, mapas de cadmio del CIAT, bibliometrix (versión con ecuaciones de la fase 4 corregidas) |
+| `Graficos_bibliometricos_cacao_387.pdf` / `.docx` | Informe corto con 7 gráficos bibliométricos sobre los 387 documentos |
+| `Catalogo_graficos_bibliometricos_cacao.pdf` | Catálogo de 38 gráficos numerados para elegir (mapas de calor, palabras, redes, tendencias, sanidad y distribución por departamento) |
+
+## Datos (`data/`)
+
+| Archivo | Qué es |
+|---|---|
+| `biblioteca_387.csv` | Las 387 fichas: id, año, autores, título, tipo, fuente, región, tema armonizado, diseño, hallazgo, enlace y fase |
+| `Revision_cacao_ruta_suroccidental_datos.xlsx` | Libro de datos completo: fichas, bitácora de búsqueda, criterios, tamizajes y muestras de verificación |
+| `busquedas.csv` | Bitácora de búsqueda de las fases 1 y 2 |
+| `estudios.csv`, `complementarios.csv`, `ampliacion.csv`, `valle.csv` | Fichas por fase (1 y 2) |
+| `tamizaje/` | Criterios, decisiones registro por registro, muestras de verificación del 20 %, RIS de cada consulta de OpenAlex (`openalex/`, `fase4/`) y RIS para Zotero |
+| `bibliometrix/` | Script de R, datos de entrada (`M.csv` 270 y `M387.csv` 387), tablas y figuras |
+| `bibliometrix/graficas_387/` | Gráficos complementarios del informe corto |
+| `bibliometrix/catalogo_graficos/` | PNG de los 38 gráficos del catálogo, scripts de Python y clasificación de los documentos de sanidad |
+| `figuras_informe/` | Figuras nuevas del informe de avance (PRISMA, años, regiones, IA, sanidad) |
+| `fuentes_datos.csv` | Fuentes de datos secundarias |
+
+## Herramientas
+
+Python 3 (csv, json, re, unicodedata, openpyxl, matplotlib, networkx, wordcloud, plotly, adjustText), R 4.3 con bibliometrix 4.3.0, Publish or Perish 8 (OpenAlex), Zotero, Rayyan, servicios ArcGIS del geovisor Clima-LoCa (Alianza Bioversity-CIAT) y Claude Opus 5.5 (Anthropic) para el tamizaje inicial y la redacción, con verificación del autor.
 
 ## Autor
 
-Juan David Rojas Villafañe · Ingeniería Agronómica, Universidad Nacional de Colombia, Sede Palmira.
+Juan David Rojas Villafañe · Ingeniería Agronómica, Universidad Nacional de Colombia, sede Palmira.
 
 ## Licencia
 
